@@ -23,10 +23,11 @@ library(car) # for Anova function
 library(broom) # for model residuals extraction
 library(emmeans) # for model mean extraction
 library(multcomp) # for pairwise comparison letter display
+library(multcompView)
 ```
 
 ```{r data import}
-crd_df 
+crd_df = read_csv("../data/wheat_nk_balkh.csv")
 
 crd_df
 ```
@@ -42,7 +43,11 @@ glimpse(crd_df)
 
 # c) Wrangling  
 ```{r crd_dfw}
-crd_dfw <- crd_df 
+crd_dfw = crd_df %>%
+  mutate(rep = factor(rep), 
+         nrate_kgha = factor(nrate_kgha),
+         krate_kgha = factor(krate_kgha)) %>%
+  mutate(trtname = paste0(nrate_kgha, "+", krate_kgha))
 
 crd_dfw
 ```
@@ -58,6 +63,20 @@ Yield: from 2795 to 7445 kg/ha
 
 # d) EDA plots  
 ```{r n boxplot}
+ggplot(crd_dfw, aes(x = nrate_kgha,
+                    y = yield_kgha,
+                    color = nrate_kgha)) + geom_boxplot() + geom_point()
+
+ggplot(crd_dfw, aes(x = nrate_kgha,
+                    y = yield_kgha,
+                    color = nrate_kgha)) + geom_boxplot() + 
+                    geom_jitter()
+
+ggplot(crd_dfw, aes(x = nrate_kgha,
+                    y = yield_kgha,
+                    color = nrate_kgha)) + geom_boxplot() + 
+                    geom_jitter() + theme(legend.position = "none")
+  
 
 ```
 
